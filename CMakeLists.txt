@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 4.3)
+project(SAMCS)
+
+set(CMAKE_CXX_STANDARD 26)
+
+add_compile_options(-Wall -Werror -Wextra -pedantic)
+
+add_executable(main main.cpp)
+add_executable(1_A Contest_1/1_A.cpp)
+add_executable(1_B Contest_1/1_B.cpp)
+add_executable(1_C Contest_1/1_C.cpp)
+add_executable(1_D Contest_1/1_D.cpp)
+add_executable(1_E Contest_1/1_E.cpp)
+add_executable(1_F Contest_1/1_F.cpp)
+add_executable(1_G Contest_1/1_G.cpp)
+add_executable(1_H Contest_1/1_H.cpp)
+add_executable(1_I Contest_1/1_I.cpp)
+add_executable(1_J Contest_1/1_J.cpp)
+add_executable(1_K Contest_1/1_K.cpp)
+add_executable(1_L Contest_1/1_L.cpp)
+add_executable(1_M Contest_1/1_M.cpp)
+add_executable(2_A Contest_2/2_A.cpp)
+add_executable(2_B Contest_2/2_B.cpp)
