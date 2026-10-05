@@ -1,16 +1,16 @@
 #include <iostream>
 #include <vector>
 
-struct Segment {
+struct int1 {
   int l;
   int r;
 };
 
-std::vector<Segment> Merge(const std::vector<Segment>& a,
-                           const std::vector<Segment>& b) {
+std::vector<int1> Merge(const std::vector<int1>& a,
+                        const std::vector<int1>& b) {
   int n = (int)a.size();
   int m = (int)b.size();
-  std::vector<Segment> c;
+  std::vector<int1> c;
   int i = 0;
   int j = 0;
   while (i < n && j < m) {
@@ -33,26 +33,26 @@ std::vector<Segment> Merge(const std::vector<Segment>& a,
   return c;
 }
 
-std::vector<Segment> MergeSort(std::vector<Segment> segments) {
+std::vector<int1> MergeSort(std::vector<int1> segments) {
   if ((int)segments.size() == 1) {
     return segments;
   }
   int mid = (int)segments.size() / 2;
-  std::vector<Segment> left(segments.begin(), segments.begin() + mid);
-  std::vector<Segment> right(segments.begin() + mid, segments.end());
+  std::vector<int1> left(segments.begin(), segments.begin() + mid);
+  std::vector<int1> right(segments.begin() + mid, segments.end());
   return Merge(MergeSort(left), MergeSort(right));
 }
 
 int main() {
   int n;
   std::cin >> n;
-  std::vector<Segment> segments(n);
+  std::vector<int1> segments(n);
   for (int i = 0; i < n; ++i) {
     std::cin >> segments[i].l >> segments[i].r;
   }
-  std::vector<Segment> vec = MergeSort(segments);
-  std::vector<Segment> ans;
-  Segment cur = vec[0];
+  std::vector<int1> vec = MergeSort(segments);
+  std::vector<int1> ans;
+  int1 cur = vec[0];
   for (auto& el : vec) {
     if (el.l <= cur.r) {
       cur.r = std::max(cur.r, el.r);
