@@ -32,10 +32,10 @@ int main() {
                     (2 * 2 * 2 * 5 * 5 * 5);
   while (right - left > 1) {
     long long mid = left + ((right - left) / 2);
-    if (Check(v, mid, k)) {
-      left = mid;
+    if (!Check(v, mid, k)) {
+      left = mid + 1;
     } else {
-      right = mid - 1;
+      right = mid;
     }
   }
   std::cout << right;
