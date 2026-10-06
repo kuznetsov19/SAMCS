@@ -37,13 +37,13 @@ std::vector<Node> Merge(const std::vector<Node>& a, const std::vector<Node>& b,
   return c;
 }
 
-std::vector<Node> MergeSort(std::vector<Node> segments, std::vector<int>& cnt) {
-  if (static_cast<int>(segments.size()) == 1) {
-    return segments;
+std::vector<Node> MergeSort(const std::vector<Node>& v, std::vector<int>& cnt) {
+  if (static_cast<int>(v.size()) == 1) {
+    return v;
   }
-  int mid = static_cast<int>(segments.size()) / 2;
-  std::vector<Node> left(segments.begin(), segments.begin() + mid);
-  std::vector<Node> right(segments.begin() + mid, segments.end());
+  int mid = static_cast<int>(v.size()) / 2;
+  std::vector<Node> left(v.begin(), v.begin() + mid);
+  std::vector<Node> right(v.begin() + mid, v.end());
   return Merge(MergeSort(left, cnt), MergeSort(right, cnt), cnt);
 }
 
@@ -56,7 +56,6 @@ int main() {
     std::cin >> v[i].val;
     v[i].ind = i;
   }
-  std::vector<Node> vec = MergeSort(v, cnt);
   for (auto el : cnt) {
     std::cout << el << ' ';
   }
