@@ -56,6 +56,7 @@ int main() {
     std::cin >> v[i].val;
     v[i].ind = i;
   }
+  MergeSort(v, cnt);
   for (auto el : cnt) {
     std::cout << el << ' ';
   }
