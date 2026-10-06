@@ -1,7 +1,8 @@
 #include <iostream>
 #include <vector>
 
-long long cnt = 0;
+int N;
+std::vector<int> cnt(N);
 
 std::vector<int> Merge(const std::vector<int>& a, const std::vector<int>& b) {
   int n = (int)a.size();
@@ -16,7 +17,7 @@ std::vector<int> Merge(const std::vector<int>& a, const std::vector<int>& b) {
     } else {
       c.push_back(b[j]);
       j++;
-      cnt += n - i;
+      cnt[i + j] = n - i;
     }
   }
   while (i < n) {
@@ -41,12 +42,13 @@ std::vector<int> MergeSort(std::vector<int> segments) {
 }
 
 int main() {
-  int n;
-  std::cin >> n;
-  std::vector<int> segments(n);
-  for (int i = 0; i < n; ++i) {
+  std::cin >> N;
+  std::vector<int> segments(N);
+  for (int i = 0; i < N; ++i) {
     std::cin >> segments[i];
   }
   std::vector<int> vec = MergeSort(segments);
-  std::cout << cnt;
+  for (auto el : cnt) {
+    std::cout << el << ' ';
+  }
 }
