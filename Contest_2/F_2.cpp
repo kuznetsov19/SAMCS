@@ -1,28 +1,35 @@
 #include <iostream>
 #include <vector>
 
-int N;
-std::vector<int> cnt(N);
+std::vector<int> cnt;
 
-std::vector<int> Merge(const std::vector<int>& a, const std::vector<int>& b) {
-  int n = (int)a.size();
-  int m = (int)b.size();
-  std::vector<int> c;
+struct Node {
+  int val, ind;
+};
+
+std::vector<Node> Merge(const std::vector<Node>& a,
+                        const std::vector<Node>& b) {
+  int n = static_cast<int>(a.size());
+  int m = static_cast<int>(b.size());
+  std::vector<Node> c;
   int i = 0;
   int j = 0;
+  int cnt_r = 0;
   while (i < n && j < m) {
-    if (a[i] <= b[j]) {
+    if (a[i].val <= b[j].val) {
       c.push_back(a[i]);
       i++;
+      cnt[a[i].ind] += cnt_r;
     } else {
       c.push_back(b[j]);
       j++;
-      cnt[i + j] = n - i;
+      cnt_r++;
     }
   }
   while (i < n) {
     c.push_back(a[i]);
     i++;
+    cnt[a[i].ind] += cnt_r;
   }
   while (j < m) {
     c.push_back(b[j]);
@@ -31,23 +38,26 @@ std::vector<int> Merge(const std::vector<int>& a, const std::vector<int>& b) {
   return c;
 }
 
-std::vector<int> MergeSort(std::vector<int> segments) {
-  if ((int)segments.size() == 1) {
+std::vector<Node> MergeSort(std::vector<Node> segments) {
+  if (static_cast<int>(segments.size()) == 1) {
     return segments;
   }
-  int mid = (int)segments.size() / 2;
-  std::vector<int> left(segments.begin(), segments.begin() + mid);
-  std::vector<int> right(segments.begin() + mid, segments.end());
+  int mid = static_cast<int>(segments.size()) / 2;
+  std::vector<Node> left(segments.begin(), segments.begin() + mid);
+  std::vector<Node> right(segments.begin() + mid, segments.end());
   return Merge(MergeSort(left), MergeSort(right));
 }
 
 int main() {
-  std::cin >> N;
-  std::vector<int> segments(N);
-  for (int i = 0; i < N; ++i) {
-    std::cin >> segments[i];
+  int n;
+  std::cin >> n;
+  cnt.resize(n);
+  std::vector<Node> v(n);
+  for (int i = 0; i < n; ++i) {
+    std::cin >> v[i].val;
+    v[i].ind = i;
   }
-  std::vector<int> vec = MergeSort(segments);
+  std::vector<Node> vec = MergeSort(v);
   for (auto el : cnt) {
     std::cout << el << ' ';
   }
