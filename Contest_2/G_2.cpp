@@ -14,8 +14,25 @@ bool Comp(Node a, Node b) {
   return a.val < b.val;
 }
 
-bool Check(std::vector<int>& b, std::vector<int>& c, int i, int j_ans,
-           int k_ans) {}
+bool Check(std::vector<Node>& b, std::vector<Node>& c, int value, int& j_ans,
+           int& k_ans) {
+  int j = 0;
+  int k = static_cast<int>(c.size());
+  bool flag = false;
+  while (j < static_cast<int>(b.size()) && k >= 0) {
+    if (b[j].val + c[k].val > value) {
+      k--;
+    } else if (b[j].val + c[k].val < value) {
+      j++;
+    } else {
+      j_ans = b[j].ind;
+      k_ans = c[k].ind;
+      flag = true;
+      --k;
+    }
+  }
+  return flag;
+}
 
 int main() {
   int s;
@@ -45,7 +62,7 @@ int main() {
   int j_ans = -1;
   int k_ans = -1;
   for (int i = 0; i < static_cast<int>(a.size()); ++i) {
-    if (Check(b, c, i, j_ans, k_ans)) {
+    if (Check(b, c, s - a[i].val, j_ans, k_ans)) {
       std::cout << i << ' ' << j_ans << ' ' << k_ans;
       return 0;
     }
