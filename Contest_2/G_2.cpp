@@ -17,19 +17,24 @@ bool Comp(Node a, Node b) {
 bool Check(std::vector<Node>& b, std::vector<Node>& c, int value, int& j_ans,
            int& k_ans) {
   int j = 0;
-  int k = static_cast<int>(c.size());
+  int k = static_cast<int>(c.size()) - 1;
   bool flag = false;
+  std::vector<std::pair<int, int>> ans;
   while (j < static_cast<int>(b.size()) && k >= 0) {
     if (b[j].val + c[k].val > value) {
       k--;
     } else if (b[j].val + c[k].val < value) {
       j++;
     } else {
-      j_ans = b[j].ind;
-      k_ans = c[k].ind;
+      ans.emplace_back(b[j].ind, c[k].ind);
       flag = true;
       --k;
     }
+  }
+  std::sort(ans.begin(), ans.end());
+  if (flag) {
+    j_ans = ans[0].first;
+    k_ans = ans[0].second;
   }
   return flag;
 }
