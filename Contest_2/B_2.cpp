@@ -6,8 +6,8 @@ const int cVuprikaluvaetesetochisloisusloviawtf2 = 45;
 const int cVuprikaluvaetesetochisloisusloviawtf3 = 10000000 + 4321;
 
 std::vector<int> Merge(const std::vector<int>& a, const std::vector<int>& b) {
-  int n = (int)a.size();
-  int m = (int)b.size();
+  int n = static_cast<int>(a.size());
+  int m = static_cast<int>(b.size());
   std::vector<int> c;
   int i = 0;
   int j = 0;
@@ -32,10 +32,10 @@ std::vector<int> Merge(const std::vector<int>& a, const std::vector<int>& b) {
 }
 
 std::vector<int> MergeSort(std::vector<int> segments) {
-  if ((int)segments.size() == 1) {
+  if (static_cast<int>(segments.size()) == 1) {
     return segments;
   }
-  int mid = (int)segments.size() / 2;
+  int mid = static_cast<int>(segments.size()) / 2;
   std::vector<int> left(segments.begin(), segments.begin() + mid);
   std::vector<int> right(segments.begin() + mid, segments.end());
   return Merge(MergeSort(left), MergeSort(right));
