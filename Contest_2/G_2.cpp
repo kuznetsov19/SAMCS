@@ -14,29 +14,29 @@ bool Comp(Node a, Node b) {
   return a.val < b.val;
 }
 
-bool Check(std::vector<Node>& b, std::vector<Node>& c, int value, int& j_ans,
-           int& k_ans) {
+bool Check(const std::vector<Node>& b, const std::vector<Node>& c, int value,
+           int& j_ans, int& k_ans) {
   int j = 0;
   int k = static_cast<int>(c.size()) - 1;
-  bool flag = false;
-  std::vector<std::pair<int, int>> ans;
+  std::pair<int, int> bst = {-1, -1};
   while (j < static_cast<int>(b.size()) && k >= 0) {
     if (b[j].val + c[k].val > value) {
       k--;
     } else if (b[j].val + c[k].val < value) {
       j++;
     } else {
-      ans.emplace_back(b[j].ind, c[k].ind);
-      flag = true;
+      if (b[j].ind < bst.first ||
+          (b[j].ind == bst.first && c[k].ind < bst.second)) {
+        bst = {b[j].ind, c[k].ind};
+      }
       --k;
     }
   }
-  std::sort(ans.begin(), ans.end());
-  if (flag) {
-    j_ans = ans[0].first;
-    k_ans = ans[0].second;
+  if (bst.first != -1) {
+    j_ans = bst.first;
+    k_ans = bst.second;
   }
-  return flag;
+  return bst.first != -1;
 }
 
 int main() {
