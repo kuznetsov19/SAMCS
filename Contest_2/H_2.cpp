@@ -1,4 +1,3 @@
-#include <cstdint>
 #include <iostream>
 #include <vector>
 
@@ -117,17 +116,15 @@ uint32_t QuickSelect(std::vector<uint32_t>& a, int left, int right, int k) {
   return QuickSelect(a, r + 1, right, k);
 }
 
-const int cShift = 8;  // сдвиг на 8 бит из генератора в условии
-
 uint32_t NextRand24(uint32_t& cur, uint32_t a, uint32_t b) {
-  cur = cur * a + b;  // переполнение uint32_t задумано условием
-  return cur >> cShift;
+  cur = (cur * a) + b;
+  return cur >> (4 + 4);
 }
 
 uint32_t NextRand32(uint32_t& cur, uint32_t a, uint32_t b) {
   uint32_t x = NextRand24(cur, a, b);
   uint32_t y = NextRand24(cur, a, b);
-  return (x << cShift) ^ y;
+  return (x << (4 + 4)) ^ y;
 }
 
 int main() {
@@ -143,7 +140,11 @@ int main() {
   uint32_t y = QuickSelect(vec, 0, static_cast<int>(vec.size()) - 1, n / 2);
   uint64_t sm = 0;
   for (uint32_t el : vec) {
-    sm += (el > y) ? el - y : y - el;
+    if (el >= y) {
+      sm += (el - y);
+    } else {
+      sm += (y - el);
+    }
   }
   std::cout << sm;
 }
