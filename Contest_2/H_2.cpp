@@ -1,10 +1,33 @@
+#include <algorithm>
 #include <cstdint>
 #include <iostream>
 #include <vector>
 
-uint32_t QuickSelect(std::vector<int> vec, int l, int r, int k);
+uint32_t QuickSelect(std::vector<uint32_t>& a, int left, int right, int k);
 
-uint32_t MedianOfMedinas(std::vector<int> vec, int l, int r) {}
+// Медиана медиан отрезка [left, right): значение pivot для QuickSelect.
+uint32_t MedianOfMedians(std::vector<uint32_t>& a, int left, int right) {
+  int n = right - left;
+
+  // Маленький отрезок: сортируем и берём середину.
+  if (n <= 5) {
+    std::sort(a.begin() + left, a.begin() + right);
+    return a[left + (n / 2)];
+  }
+
+  // Идём по пятёркам (последняя может быть короче), сортируем каждую,
+  // её медиану обменом ставим в начало отрезка: a[left .. j-1].
+  int j = left;
+  for (int i = left; i < right; i += 5) {
+    int end = std::min(i + 5, right);
+    std::sort(a.begin() + i, a.begin() + end);
+    std::swap(a[j], a[i + ((end - i) / 2)]);
+    ++j;
+  }
+
+  // Точная медиана медиан — QuickSelect на отрезке медиан [left, j).
+  return QuickSelect(a, left, j, left + ((j - left) / 2));
+}
 
 uint32_t NextRand24(uint32_t& cur, uint32_t a, uint32_t b) {
   cur = (cur * a) + b;
