@@ -126,4 +126,5 @@ int main() {
   for (auto el : vec) {
     sm += abs(el - y);
   }
+  std::cout << sm;
 }
