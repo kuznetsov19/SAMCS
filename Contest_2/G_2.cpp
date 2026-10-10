@@ -25,7 +25,7 @@ bool Check(const std::vector<Node>& b, const std::vector<Node>& c, int value,
     } else if (b[j].val + c[k].val < value) {
       j++;
     } else {
-      if (b[j].ind < bst.first ||
+      if (bst.first == -1 || b[j].ind < bst.first ||
           (b[j].ind == bst.first && c[k].ind < bst.second)) {
         bst = {b[j].ind, c[k].ind};
       }
