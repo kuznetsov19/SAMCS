@@ -5,18 +5,14 @@
 
 uint32_t QuickSelect(std::vector<uint32_t>& a, int left, int right, int k);
 
-// Медиана медиан отрезка [left, right): значение pivot для QuickSelect.
 uint32_t MedianOfMedians(std::vector<uint32_t>& a, int left, int right) {
   int n = right - left;
 
-  // Маленький отрезок: сортируем и берём середину.
   if (n <= 5) {
     std::sort(a.begin() + left, a.begin() + right);
     return a[left + (n / 2)];
   }
 
-  // Идём по пятёркам (последняя может быть короче), сортируем каждую,
-  // её медиану обменом ставим в начало отрезка: a[left .. j-1].
   int j = left;
   for (int i = left; i < right; i += 5) {
     int end = std::min(i + 5, right);
@@ -25,8 +21,36 @@ uint32_t MedianOfMedians(std::vector<uint32_t>& a, int left, int right) {
     ++j;
   }
 
-  // Точная медиана медиан — QuickSelect на отрезке медиан [left, j).
   return QuickSelect(a, left, j, left + ((j - left) / 2));
+}
+
+uint32_t QuickSelect(std::vector<uint32_t>& a, int left, int right, int k) {
+  uint32_t pivot = MedianOfMedians(a, left, right);
+  int l = left;
+  int i = left;
+  int r = right - 1;
+
+  while (i <= r) {
+    if (a[i] < pivot) {
+      std::swap(a[l], a[i]);
+      l++;
+      i++;
+    } else if (a[i] == pivot) {
+      i++;
+    } else {
+      std::swap(a[i], a[r]);
+      r--;
+    }
+  }
+
+  if (k < l) {
+    return QuickSelect(a, left, l, k);
+  }
+  if (l <= k && k <= r) {
+    return pivot;
+  }
+  return QuickSelect(a, r + 1, right, k);
+
 }
 
 uint32_t NextRand24(uint32_t& cur, uint32_t a, uint32_t b) {
