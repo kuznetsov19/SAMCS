@@ -1,10 +1,12 @@
+#include <cstdint>
 #include <iostream>
 #include <vector>
 
-std::vector<int> Merge(const std::vector<int>& a, const std::vector<int>& b) {
-  int n = (int)a.size();
-  int m = (int)b.size();
-  std::vector<int> c;
+std::vector<uint32_t> Merge(const std::vector<uint32_t>& a,
+                            const std::vector<uint32_t>& b) {
+  int n = static_cast<int>(a.size());
+  int m = static_cast<int>(b.size());
+  std::vector<uint32_t> c;
   int i = 0;
   int j = 0;
   while (i < n && j < m) {
@@ -27,17 +29,17 @@ std::vector<int> Merge(const std::vector<int>& a, const std::vector<int>& b) {
   return c;
 }
 
-std::vector<int> MergeSort(std::vector<int> segments) {
-  if ((int)segments.size() == 1) {
+std::vector<uint32_t> MergeSort(std::vector<uint32_t> segments) {
+  if (static_cast<int>(segments.size()) == 1) {
     return segments;
   }
-  int mid = (int)segments.size() / 2;
-  std::vector<int> left(segments.begin(), segments.begin() + mid);
-  std::vector<int> right(segments.begin() + mid, segments.end());
+  int mid = static_cast<int>(segments.size()) / 2;
+  std::vector<uint32_t> left(segments.begin(), segments.begin() + mid);
+  std::vector<uint32_t> right(segments.begin() + mid, segments.end());
   return Merge(MergeSort(left), MergeSort(right));
 }
 
-int MedianOf5(const std::vector<int>& a, int i1, int i2, int i3, int i4,
+int MedianOf5(const std::vector<uint32_t>& a, int i1, int i2, int i3, int i4,
               int i5) {
   if (a[i1] > a[i2]) {
     std::swap(i1, i2);
@@ -63,11 +65,11 @@ int MedianOf5(const std::vector<int>& a, int i1, int i2, int i3, int i4,
   return i3;
 }
 
-int MedianOfMedians(std::vector<int>& a, int left, int right) {
+uint32_t MedianOfMedians(std::vector<uint32_t>& a, int left, int right) {
   int n = right - left;
 
   if (n <= 5) {
-    std::vector<int> part(a.begin() + left, a.begin() + right);
+    std::vector<uint32_t> part(a.begin() + left, a.begin() + right);
     part = MergeSort(part);
     for (int i = 0; i < n; i++) {
       a[left + i] = part[i];
@@ -87,8 +89,8 @@ int MedianOfMedians(std::vector<int>& a, int left, int right) {
   return MedianOfMedians(a, left, j);
 }
 
-int QuickSelect(std::vector<int>& a, int left, int right, int k) {
-  int pivot = MedianOfMedians(a, left, right);
+uint32_t QuickSelect(std::vector<uint32_t>& a, int left, int right, int k) {
+  uint32_t pivot = MedianOfMedians(a, left, right);
   int l = left;
   int i = left;
   int r = right - 1;
@@ -115,16 +117,33 @@ int QuickSelect(std::vector<int>& a, int left, int right, int k) {
   return QuickSelect(a, r + 1, right, k);
 }
 
+const int cShift = 8;  // сдвиг на 8 бит из генератора в условии
+
+uint32_t NextRand24(uint32_t& cur, uint32_t a, uint32_t b) {
+  cur = cur * a + b;  // переполнение uint32_t задумано условием
+  return cur >> cShift;
+}
+
+uint32_t NextRand32(uint32_t& cur, uint32_t a, uint32_t b) {
+  uint32_t x = NextRand24(cur, a, b);
+  uint32_t y = NextRand24(cur, a, b);
+  return (x << cShift) ^ y;
+}
+
 int main() {
   int n;
-  int a;
-  int b;
+  uint32_t a;
+  uint32_t b;
   std::cin >> n >> a >> b;
-  std::vector<int> vec(n);
-  int y = QuickSelect(vec, 0, static_cast<int>(vec.size()) - 1, n / 2);
-  int sm = 0;
-  for (auto el : vec) {
-    sm += abs(el - y);
+  std::vector<uint32_t> vec(n);
+  uint32_t cur = 0;
+  for (int i = 0; i < n; ++i) {
+    vec[i] = NextRand32(cur, a, b);
+  }
+  uint32_t y = QuickSelect(vec, 0, static_cast<int>(vec.size()) - 1, n / 2);
+  uint64_t sm = 0;
+  for (uint32_t el : vec) {
+    sm += (el > y) ? el - y : y - el;
   }
   std::cout << sm;
 }
