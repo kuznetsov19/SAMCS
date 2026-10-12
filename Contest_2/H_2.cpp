@@ -50,7 +50,6 @@ uint32_t QuickSelect(std::vector<uint32_t>& a, int left, int right, int k) {
     return pivot;
   }
   return QuickSelect(a, r + 1, right, k);
-
 }
 
 uint32_t NextRand24(uint32_t& cur, uint32_t a, uint32_t b) {
