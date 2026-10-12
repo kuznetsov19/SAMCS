@@ -2,50 +2,59 @@
 #include <iostream>
 #include <vector>
 
+struct Job {
+  long long a;
+  long long b;
+  int ind;
+};
+
+// Работы с a <= b: по возрастанию времени у первого учителя.
+bool CompFirst(const Job& lhs, const Job& rhs) { return lhs.a < rhs.a; }
+
+// Работы с a > b: по убыванию времени у второго учителя.
+bool CompSecond(const Job& lhs, const Job& rhs) { return lhs.b > rhs.b; }
+
 int main() {
   int n;
   std::cin >> n;
-  std::vector<long long> a(n);
-  std::vector<long long> b(n);
-  for (auto& x : a) {
-    std::cin >> x;
+  std::vector<Job> jobs(n);
+  for (int i = 0; i < n; ++i) {
+    std::cin >> jobs[i].a;
+    jobs[i].ind = i + 1;
   }
-  for (auto& x : b) {
-    std::cin >> x;
+  for (int i = 0; i < n; ++i) {
+    std::cin >> jobs[i].b;
   }
 
-  // Правило Джонсона: сначала работы с a <= b по возрастанию a,
-  // потом работы с a > b по убыванию b.
-  std::vector<int> first;
-  std::vector<int> second;
+  // Правило Джонсона: сначала работы с a <= b, потом работы с a > b.
+  std::vector<Job> first;
+  std::vector<Job> second;
   for (int i = 0; i < n; ++i) {
-    if (a[i] <= b[i]) {
-      first.push_back(i);
+    if (jobs[i].a <= jobs[i].b) {
+      first.push_back(jobs[i]);
     } else {
-      second.push_back(i);
+      second.push_back(jobs[i]);
     }
   }
-  std::sort(first.begin(), first.end(),
-            [&](int i, int j) { return a[i] < a[j]; });
-  std::sort(second.begin(), second.end(),
-            [&](int i, int j) { return b[i] > b[j]; });
-  std::vector<int> order = first;
+  std::sort(first.begin(), first.end(), CompFirst);
+  std::sort(second.begin(), second.end(), CompSecond);
+  std::vector<Job> order = first;
   order.insert(order.end(), second.begin(), second.end());
 
   long long end_a = 0;
   long long end_b = 0;
-  for (int i : order) {
-    end_a += a[i];
-    end_b = std::max(end_a, end_b) + b[i];
+  for (int i = 0; i < n; ++i) {
+    end_a += order[i].a;
+    end_b = std::max(end_a, end_b) + order[i].b;
   }
 
   std::cout << end_b << '\n';
-  for (int i : order) {
-    std::cout << i + 1 << ' ';
+  for (int i = 0; i < n; ++i) {
+    std::cout << order[i].ind << ' ';
   }
   std::cout << '\n';
-  for (int i : order) {
-    std::cout << i + 1 << ' ';
+  for (int i = 0; i < n; ++i) {
+    std::cout << order[i].ind << ' ';
   }
   std::cout << '\n';
 }
