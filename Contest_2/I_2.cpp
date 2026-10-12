@@ -8,11 +8,9 @@ struct Job {
   int ind;
 };
 
-// Работы с a <= b: по возрастанию времени у первого учителя.
-bool CompFirst(const Job& lhs, const Job& rhs) { return lhs.a < rhs.a; }
+bool Comp1(const Job& а, const Job& b) { return а.a < b.a; }
 
-// Работы с a > b: по убыванию времени у второго учителя.
-bool CompSecond(const Job& lhs, const Job& rhs) { return lhs.b > rhs.b; }
+bool Comp2(const Job& a, const Job& b) { return a.b > b.b; }
 
 int main() {
   int n;
@@ -26,7 +24,6 @@ int main() {
     std::cin >> jobs[i].b;
   }
 
-  // Правило Джонсона: сначала работы с a <= b, потом работы с a > b.
   std::vector<Job> first;
   std::vector<Job> second;
   for (int i = 0; i < n; ++i) {
@@ -36,8 +33,8 @@ int main() {
       second.push_back(jobs[i]);
     }
   }
-  std::sort(first.begin(), first.end(), CompFirst);
-  std::sort(second.begin(), second.end(), CompSecond);
+  std::sort(first.begin(), first.end(), Comp1);
+  std::sort(second.begin(), second.end(), Comp2);
   std::vector<Job> order = first;
   order.insert(order.end(), second.begin(), second.end());
 
@@ -56,5 +53,4 @@ int main() {
   for (int i = 0; i < n; ++i) {
     std::cout << order[i].ind << ' ';
   }
-  std::cout << '\n';
 }
