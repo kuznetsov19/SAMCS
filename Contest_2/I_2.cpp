@@ -2,20 +2,20 @@
 #include <iostream>
 #include <vector>
 
-struct Job {
+struct Node {
   long long a;
   long long b;
   int ind;
 };
 
-bool Comp1(const Job& а, const Job& b) { return а.a < b.a; }
+bool Comp1(const Node& а, const Node& b) { return а.a < b.a; }
 
-bool Comp2(const Job& a, const Job& b) { return a.b > b.b; }
+bool Comp2(const Node& a, const Node& b) { return a.b > b.b; }
 
 int main() {
   int n;
   std::cin >> n;
-  std::vector<Job> jobs(n);
+  std::vector<Node> jobs(n);
   for (int i = 0; i < n; ++i) {
     std::cin >> jobs[i].a;
     jobs[i].ind = i + 1;
@@ -24,8 +24,8 @@ int main() {
     std::cin >> jobs[i].b;
   }
 
-  std::vector<Job> first;
-  std::vector<Job> second;
+  std::vector<Node> first;
+  std::vector<Node> second;
   for (int i = 0; i < n; ++i) {
     if (jobs[i].a <= jobs[i].b) {
       first.push_back(jobs[i]);
@@ -35,8 +35,10 @@ int main() {
   }
   std::sort(first.begin(), first.end(), Comp1);
   std::sort(second.begin(), second.end(), Comp2);
-  std::vector<Job> order = first;
-  order.insert(order.end(), second.begin(), second.end());
+  std::vector<Node> order = first;
+  for (const auto& i : second) {
+    order.push_back(i);
+  }
 
   long long end_a = 0;
   long long end_b = 0;
