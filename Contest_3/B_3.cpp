@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <iostream>
 #include <stack>
 #include <vector>
@@ -7,35 +8,26 @@ bool Check(std::string& s) { return s == "*" || s == "+" || s == "-"; }
 int main() {
   std::string s;
   std::getline(std::cin, s);
-  std::vector<std::string> v;
-  std::string cur = "";
-  for (int i = 0; i < static_cast<int>(s.length()); ++i) {
-    if (s[i] == ' ') {
-      if (!cur.empty()) {
-        v.push_back(cur);
-        cur.clear();
-      }
-    } else {
-      cur += s[i];
-    }
+  std::vector<char> v;
+  for (int i = 0; i < static_cast<int>(s.length()); i += 2) {
+    v.push_back(v[i]);
   }
-  if (!cur.empty()) v.push_back(cur);
   std::stack<int> st;
   for (int i = 0; i < static_cast<int>(v.size()); ++i) {
     if (!Check(v[i])) {
       st.push(std::stoi(v[i]));
     } else {
-      int tmp = st.top();
+      int b = st.top();
+      st.pop();
+      int a = st.top();
       st.pop();
       if (s[i] == '*') {
-        tmp *= st.top();
+        st.push(a * b);
       } else if (s[i] == '-') {
-        tmp -= st.top();
+        st.push(a - b);
       } else {
-        tmp += st.top();
+        st.push(a + b);
       }
-      st.pop();
-      st.push(tmp);
     }
   }
   std::cout << st.top();
